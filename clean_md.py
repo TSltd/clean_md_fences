@@ -56,19 +56,30 @@ def clean_fences(content: str) -> str:
 
     return "\n".join(lines)
 
-
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         path = sys.argv[1]
 
-        with open(path, "r", encoding="utf-8") as f:
-            data = f.read()
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = f.read()
 
-        cleaned = clean_fences(data)
+            cleaned = clean_fences(data)
 
-        # overwrite original file
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(cleaned)
+            # overwrite original file
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(cleaned)
+
+            print(f"Success: cleaned '{path}'")
+
+        except FileNotFoundError:
+            print(f"Error: input file not found: '{path}'")
+
+        except PermissionError:
+            print(f"Error: permission denied: '{path}'")
+
+        except Exception as e:
+            print(f"Error: {e}")
 
     else:
         data = sys.stdin.read()
