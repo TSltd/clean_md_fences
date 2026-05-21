@@ -3,7 +3,7 @@
 """
 Usage:
 
-    python clean_md.py input.md > output.md
+    python3 clean_md.py input.md > output.md
 
 Or:
 
@@ -59,9 +59,17 @@ def clean_fences(content: str) -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
+        path = sys.argv[1]
+
+        with open(path, "r", encoding="utf-8") as f:
             data = f.read()
+
+        cleaned = clean_fences(data)
+
+        # overwrite original file
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(cleaned)
+
     else:
         data = sys.stdin.read()
-
-    print(clean_fences(data))
+        print(clean_fences(data))
