@@ -1,16 +1,46 @@
+![Platform](https://img.shields.io/badge/platform-linux-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 # clean-md-fences
 
-Small utility script for cleaning ChatGPT-style Markdown code fences.
+A desktop utility for cleaning ChatGPT-style Markdown code fences.
 
-It removes unwanted `id="..."` attributes from fenced code blocks and normalizes `text` / `markdown` fences.
+It removes unwanted `id="..."` attributes from fenced code blocks and normalizes `text` / `markdown` fences while preserving all other language identifiers.
+
+Available as:
+
+- Python source
+- Standalone Linux AppImage
+- PyInstaller executable
+
+---
+
+## Features
+
+- Recursive folder scanning
+- Processes entire Markdown documentation repositories
+- Preview files before modification
+- Shows the first matching fence that triggered detection
+- Optional backup creation (`.bak` files)
+- Backup discovery and cleanup tools
+- Supports:
+  - ` ```text `
+  - ` ```markdown `
+  - ` ```python id="..." `
+  - ` ```json id="..." `
+  - Any other fenced language
+
+- Preserves original line endings
+- Standalone GUI application (Tkinter)
+- Linux AppImage distribution
 
 ---
 
 ## What It Does
 
-Transforms code fences like this:
+Transforms:
 
-````
+````markdown
 ```text id="a1b2c3"
 hello
 ```
@@ -18,7 +48,7 @@ hello
 
 Into:
 
-````
+````markdown
 ```
 hello
 ```
@@ -26,20 +56,20 @@ hello
 
 And transforms:
 
-````
+````markdown
 ```json id="cdctex"
 {
-"hello": "world"
+  "hello": "world"
 }
 ```
 ````
 
 Into:
 
-````
+````markdown
 ```json
 {
-"hello": "world"
+  "hello": "world"
 }
 ```
 ````
@@ -50,36 +80,37 @@ Into:
 
 ### `text` and `markdown`
 
-These language tags are removed completely.
+Language identifiers are removed entirely.
 
-Examples:
+Example:
 
-````
+````markdown
 ```text id="abc"
-
-```
-
+example
 ```
 ````
 
-→
+becomes:
 
-````
+````markdown
 ```
+example
 ```
 ````
 
-````
+And:
+
+````markdown
 ```markdown id="xyz"
-
+example
 ```
 ````
 
-→
+becomes:
 
-````
+````markdown
 ```
-
+example
 ```
 ````
 
@@ -87,61 +118,118 @@ Examples:
 
 ### Other Languages
 
-The language is preserved, but the `id="..."` attribute is removed.
+The language identifier is preserved.
+
+Only the `id="..."` attribute is removed.
 
 Example:
 
-````
-```json id="123"
-
+````markdown
+```python id="abc123"
+print("hello")
 ```
 ````
 
-→
+becomes:
 
-````
-```json
-
+````markdown
+```python
+print("hello")
 ```
 ````
 
 ---
 
-## Installation
+## GUI Usage
 
-Clone the repository:
-
-```bash
-git clone https://github.com/yourname/clean-md-fences.git
-cd clean-md-fences
-```
-
-Make the script executable (optional):
+Launch the application:
 
 ```bash
-chmod +x clean_md.py
+python clean_md_v2.py
 ```
+
+### Workflow
+
+1. Select a file or folder.
+2. Click **Scan**.
+3. Review files that will be modified.
+4. Click **Clean**.
+5. Optionally create backups.
+6. Optionally remove backups after verification.
+
+### Backup Management
+
+When enabled, backups are created as:
+
+```text
+README.md.bak
+guide.md.bak
+api.md.bak
+```
+
+The application can:
+
+- Find backup files
+- Display backup files
+- Delete backup files
 
 ---
 
-## Usage
+## Linux AppImage
 
-### Process a File
+A standalone AppImage is available from the GitHub Releases page.
 
-```bash
-python clean_md.py input.md > output.md
+Download:
+
+```text
+MarkdownFenceCleaner-x86_64.AppImage
 ```
 
-### Pipe Input
+Make executable:
 
 ```bash
-cat input.md | python clean_md.py
+chmod +x MarkdownFenceCleaner-x86_64.AppImage
 ```
 
-### In-place Editing (Linux/macOS)
+Run:
 
 ```bash
-python clean_md.py input.md > tmp.md && mv tmp.md input.md
+./MarkdownFenceCleaner-x86_64.AppImage
+```
+
+No Python installation is required.
+
+---
+
+## Building from Source
+
+Create a virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install build tools:
+
+```bash
+pip install pyinstaller
+```
+
+Build:
+
+```bash
+pyinstaller \
+  --onefile \
+  --windowed \
+  --name MarkdownFenceCleaner \
+  clean_md_v2.py
+```
+
+Result:
+
+```text
+dist/MarkdownFenceCleaner
 ```
 
 ---
@@ -150,28 +238,28 @@ python clean_md.py input.md > tmp.md && mv tmp.md input.md
 
 ### Input
 
-````
+````markdown
 ```text id="a1b2c3"
 Define runtime semantic contracts
 ```
 
 ```json id="cdctex"
 {
-"capability": "reassure"
+  "capability": "reassure"
 }
 ```
 ````
 
 ### Output
 
-````
+````markdown
 ```
 Define runtime semantic contracts
 ```
 
 ```json
 {
-"capability": "reassure"
+  "capability": "reassure"
 }
 ```
 ````
@@ -180,9 +268,13 @@ Define runtime semantic contracts
 
 ## Requirements
 
-- Python 3.7+
+### Running from Source
 
-No external dependencies required.
+- Python 3.8+
+
+### Standalone AppImage
+
+No dependencies required.
 
 ---
 
