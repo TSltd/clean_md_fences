@@ -468,7 +468,10 @@ def main():
 
     root = tk.Tk()
     CleanerGUI(root)
-    root.mainloop()
+    try:
+        root.mainloop()
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == "__main__":
