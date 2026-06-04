@@ -177,7 +177,9 @@ The application can:
 
 ## Linux AppImage
 
-A standalone AppImage is available from the GitHub Releases page.
+A standalone AppImage is available from the GitHub Releases page:
+
+https://github.com/TSltd/clean_md_fences/releases/tag/v1.0.0
 
 Download:
 
